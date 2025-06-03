@@ -1,0 +1,16 @@
+[
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "大",
+    "dynamics": "f",
+    "ornament": "trill"
+  },
+  {
+    "pitch": 6,
+    "duration": 1,
+    "lyric": "声",
+    "dynamics": "p",
+    "ornament": "mordent"
+  }
+]

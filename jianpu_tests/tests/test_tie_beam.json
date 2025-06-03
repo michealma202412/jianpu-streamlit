@@ -1,0 +1,31 @@
+[
+  {
+    "pitch": 1,
+    "duration": 1,
+    "lyric": "在",
+    "dot": true
+  },
+  {
+    "pitch": 6,
+    "duration": 0.5,
+    "lyric": "一",
+    "tie": true,
+    "beam": "a"
+  },
+  {
+    "pitch": 6,
+    "duration": 0.5,
+    "lyric": "起",
+    "beam": "a"
+  },
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "，"
+  },
+  {
+    "pitch": 3,
+    "duration": 1,
+    "lyric": "敬"
+  }
+]

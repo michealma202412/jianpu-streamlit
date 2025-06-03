@@ -1,0 +1,17 @@
+[
+  {
+    "pitch": -3,
+    "duration": 1,
+    "lyric": "低"
+  },
+  {
+    "pitch": 1,
+    "duration": 1,
+    "lyric": "中"
+  },
+  {
+    "pitch": 9,
+    "duration": 1,
+    "lyric": "高"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "key": "G"
+  },
+  {
+    "time": "3/4"
+  },
+  {
+    "tempo": 100
+  },
+  {
+    "pitch": 1,
+    "duration": 1,
+    "lyric": "调"
+  },
+  {
+    "pitch": 2,
+    "duration": 1,
+    "lyric": "拍"
+  },
+  {
+    "pitch": 3,
+    "duration": 1,
+    "lyric": "速"
+  }
+]
