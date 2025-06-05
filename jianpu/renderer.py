@@ -69,3 +69,22 @@ def draw_note(c, x, y, note):
         sym = get_dynamics_symbol(dynamics)
         c.setFont(FONT_NOTE, 10)
         c.drawCentredString(x, y + 24, sym)
+
+    # # 🎵 中横线节奏辅助线（简谱风格专用）
+    # if ENABLE_NOTE_MIDLINE:
+    #     duration = note.get("duration", 1)
+    #     dot = note.get("dot", False)
+    #     line_length = NOTE_STEP * 0.9
+    #     c.setLineWidth(1)
+
+    #     # 中横线应位于歌词下方（lyric 相对 y - 22，再往下移动 6）
+    #     line_y_base = y + LYRIC_OFFSET_Y - 6
+
+    #     if duration == 2:
+    #         c.line(x - line_length / 2, line_y_base, x + line_length / 2, line_y_base)
+    #     elif duration == 4:
+    #         c.line(x - line_length / 2, line_y_base + 2, x + line_length / 2, line_y_base + 2)
+    #         c.line(x - line_length / 2, line_y_base - 2, x + line_length / 2, line_y_base - 2)
+    #         if dot:
+    #             c.line(x - line_length / 2, line_y_base, x + line_length / 2, line_y_base)
+

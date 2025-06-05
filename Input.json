@@ -9,63 +9,333 @@
     "tempo": 80
   },
   {
-    "repeat": "start"
-  },
-  {
-    "pitch": -3,
+    "pitch": 3,
     "duration": 1,
-    "lyric": "低"
-  },
-  {
-    "pitch": 1,
-    "duration": 1,
-    "lyric": "中"
-  },
-  {
-    "pitch": 9,
-    "duration": 1,
-    "lyric": "高"
+    "lyric": "我"
   },
   {
     "pitch": 5,
     "duration": 1,
-    "lyric": "附点",
-    "dot": true
+    "lyric": "们"
+  },
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "又"
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "在",
+    "beam": "a"
   },
   {
     "pitch": 6,
     "duration": 0.5,
-    "lyric": "连",
+    "lyric": "一",
     "tie": true,
     "beam": "a"
   },
   {
+    "bar": true
+  },
+  {
     "pitch": 6,
-    "duration": 0.5,
-    "lyric": "音",
-    "beam": "a"
+    "duration": 1,
+    "lyric": ""
+  },
+  {
+    "pitch": 5,
+    "duration": 2,
+    "lyric": "起"
   },
   {
     "pitch": 0,
     "duration": 1,
-    "rest": true,
-    "lyric": "休"
+    "lyric": "",
+    "rest": true
   },
   {
-    "pitch": 5,
-    "duration": 1,
-    "lyric": "大",
-    "dynamics": "f",
-    "ornament": "trill"
+    "bar": true
   },
   {
     "pitch": 6,
     "duration": 1,
-    "lyric": "声",
-    "dynamics": "p",
-    "ornament": "mordent"
+    "lyric": "同",
+    "beam": "b",
+    "dot": true
   },
   {
-    "repeat": "end"
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "心",
+    "beam": "b",
+    "dot": true
+  },
+  {
+    "pitch": 3,
+    "duration": 1,
+    "lyric": "敬"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 2,
+    "duration": 3,
+    "lyric": "拜"
+  },
+  {
+    "pitch": 0,
+    "duration": 1,
+    "lyric": "",
+    "rest": true
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 3,
+    "duration": 1,
+    "lyric": "我"
+  },
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "们"
+  },
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "又"
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "在",
+    "beam": "c"
+  },
+  {
+    "pitch": 6,
+    "duration": 0.5,
+    "lyric": "一",
+    "tie": true,
+    "beam": "c"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 6,
+    "duration": 1,
+    "lyric": ""
+  },
+  {
+    "pitch": 5,
+    "duration": 2,
+    "lyric": "起"
+  },
+  {
+    "pitch": 0,
+    "duration": 1,
+    "lyric": "",
+    "rest": true
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 6,
+    "duration": 1,
+    "lyric": "数",
+    "dot": true
+  },
+  {
+    "pitch": 1,
+    "duration": 1,
+    "lyric": "算",
+    "dot": true
+  },
+  {
+    "pitch": 10,
+    "duration": 1,
+    "lyric": "恩"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 9,
+    "duration": 2,
+    "lyric": "典"
+  },
+  {
+    "pitch": 0,
+    "duration": 1,
+    "lyric": "",
+    "rest": true
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "他",
+    "beam": "d"
+  },
+  {
+    "pitch": 9,
+    "duration": 0.5,
+    "lyric": "赦",
+    "beam": "d"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 10,
+    "duration": 1,
+    "lyric": "免"
+  },
+  {
+    "pitch": 10,
+    "duration": 0.5,
+    "lyric": "过",
+    "beam": "e"
+  },
+  {
+    "pitch": 10,
+    "duration": 0.5,
+    "lyric": "去",
+    "beam": "e",
+    "tie": true
+  },
+  {
+    "pitch": 10,
+    "duration": 1,
+    "lyric": ""
+  },
+  {
+    "pitch": 9,
+    "duration": 1,
+    "lyric": "一"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 9,
+    "duration": 1,
+    "lyric": "切"
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "罪",
+    "beam": "f"
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "愆，",
+    "tie": true,
+    "beam": "f"
+  },
+  {
+    "pitch": 8,
+    "duration": 2,
+    "lyric": ""
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 8,
+    "duration": 1,
+    "lyric": "出"
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "黑",
+    "beam": "g"
+  },
+  {
+    "pitch": 8,
+    "duration": 0.5,
+    "lyric": "暗",
+    "tie": true,
+    "beam": "g"
+  },
+  {
+    "pitch": 8,
+    "duration": 1,
+    "lyric": ""
+  },
+  {
+    "pitch": 7,
+    "duration": 1,
+    "lyric": "死"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 6,
+    "duration": 1,
+    "lyric": "亡，"
+  },
+  {
+    "pitch": 0,
+    "duration": 2,
+    "lyric": "",
+    "rest": true
+  },
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "赐"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 6,
+    "duration": 1,
+    "lyric": "新"
+  },
+  {
+    "pitch": 8,
+    "duration": 2,
+    "lyric": "心，"
+  },
+  {
+    "pitch": 6,
+    "duration": 1,
+    "lyric": "和"
+  },
+  {
+    "bar": true
+  },
+  {
+    "pitch": 5,
+    "duration": 1,
+    "lyric": "新"
+  },
+  {
+    "pitch": 8,
+    "duration": 2,
+    "lyric": "灵，"
+  },
+  {
+    "pitch": 9,
+    "duration": 0.5,
+    "lyric": "和"
+  },
+  {
+    "pitch": 10,
+    "duration": 0.5,
+    "lyric": "那"
+  },
+  {
+    "bar": true
   }
 ]

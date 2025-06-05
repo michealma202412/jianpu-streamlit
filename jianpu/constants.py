@@ -35,7 +35,11 @@ DOT_OFFSET_Y_RATIO = 0.35   # 附点（节奏点）相对字体高度的垂直�
 TIE_ARC_HEIGHT = 12        # 连音线弧形的垂直高度（越大越弯）
 TIE_ARC_BASE = 5           # 连音线与音符中心点之间的起始高度偏移
 
-BEAM_LINE_OFFSET = 24      # 节拍连接横线（beam）距离音符中心的垂直偏移（负值表示下方）
+BEAM_LINE_OFFSET = 6      # 节拍连接横线（beam）距离音符中心的垂直偏移（负值表示下方）
+
+# ENABLE_NOTE_MIDLINE = True
+# HORIZONTAL_LINE_WIDTH = 1
+# HORIZONTAL_LINE_LENGTH_RATIO = 0.9  # 可设置为 NOTE_STEP * 0.9
 
 
 HIGH_DOT_X_OFFSET = -1.5   # 高音点（上点）相对于音符的左右偏移（负值偏左）
