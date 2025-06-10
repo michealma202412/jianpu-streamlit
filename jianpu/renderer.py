@@ -4,9 +4,14 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from jianpu.constants import *
 from jianpu.symbols import get_pitch_symbol, get_ornament_symbol, get_dynamics_symbol
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 # 字体注册
 pdfmetrics.registerFont(TTFont(FONT_LYRIC, FONT_PATH))
+
+def dash_width():
+    """返回一个 '-' 的实际渲染宽度"""
+    return stringWidth("-", FONT_NOTE, FONT_SIZE_NOTE)
 
 def draw_note(c, x, y, note):
     pitch_num = note.get("pitch", 0)
@@ -87,14 +92,20 @@ def draw_note(c, x, y, note):
     #             x + line_len/2, base_y - offset)
 
     # ---------- ② 中横线 dash（二分 & 全音符） ----------
-    if duration in (2,3,4):
-        dash_cnt = 3 if duration == 4 else (2 if duration == 3 else 1)     # 全音符 3 个 dash，三分2个，二分 1 个
-
+    if duration in (2, 3, 4):
+        dash_cnt = int(duration) - 1
+        dash_str = "-"
+        # 1) 计算 dash 自身宽度
+        dash_w = stringWidth(dash_str, FONT_NOTE, font_size)
+        # 2) 计算数字本身宽度，保证 dash 紧贴数字
+        pitch_symbol = get_pitch_symbol(pitch_num)
+        symbol_w = stringWidth(pitch_symbol, FONT_NOTE, font_size)
+        # 3) 起始 X：数字中心 + half_width + 少许 padding
+        start_x = x + symbol_w/2 + 2
+        # 4) 画 dash，每个 dash 之间留 2pt 微小间隔
+        c.setFont(FONT_NOTE, font_size)
         for i in range(dash_cnt):
-            dash_str = "-"
-            # 将 dash 画在数字右侧一点 (NOTE_DASH_OFFSET 可写在 constants.py)
-            c.setFont(FONT_NOTE, FONT_SIZE_NOTE)
-            c.drawString(x + NOTE_DASH_OFFSET*(i+1), y, dash_str)
+            c.drawString(start_x + i * (dash_w + 2), y, dash_str)
 
     # ---------- ③ 四分音符 duration==1: 无需标识 ----------
     # 不做任何处理

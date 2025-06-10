@@ -15,7 +15,7 @@ PAGE_WIDTH, PAGE_HEIGHT = A4
 FONT_SIZE_NOTE = 16        # 音符数字的字号（建议 14~18）
 FONT_SIZE_LYRIC = 14       # 歌词的字号（建议比音符略小）
 
-NOTE_STEP = 40             # 每个音符之间的水平间距（点数）
+NOTE_STEP = 16             # 每个音符之间的水平间距（点数）
 LINE_HEIGHT = 50           # 每行简谱之间的垂直间距（点数）
 
 TOP_MARGIN = 50            # 页面顶部边距（点数）
@@ -40,7 +40,7 @@ BEAM_LINE_OFFSET = 6      # 节拍连接横线（beam）距离音符中心的垂
 ENABLE_NOTE_MIDLINE = True
 HORIZONTAL_LINE_WIDTH = 1
 HORIZONTAL_LINE_LENGTH_RATIO = 0.9  # 可设置为 NOTE_STEP * 0.9
-NOTE_DASH_OFFSET = NOTE_STEP
+NOTE_DASH_OFFSET = NOTE_STEP*0.6
 
 HIGH_DOT_X_OFFSET = -1.5   # 高音点（上点）相对于音符的左右偏移（负值偏左）
 HIGH_DOT_Y_OFFSET_RATIO = 1  # 高音点垂直偏移比例（相对字号）
