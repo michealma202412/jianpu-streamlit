@@ -4,77 +4,103 @@ from jianpu.renderer import draw_note
 from jianpu.constants import *
 from reportlab.pdfgen import canvas
 
+# —————————————————————————————————————————
+# 计算任意 token（音符 / bar / repeat）在页面上需占的水平宽度
+# —————————————————————————————————————————
+def get_token_width(token):
+    # 1) 小节线 / repeat
+    if token.get("bar") or token.get("repeat") in ("start", "end"):
+        return BAR_WIDTH
+
+    # 2) 普通音符
+    width = DURATION_WIDTH_MAP.get(token.get("duration", 1), NOTE_STEP)
+
+    # 长歌词补偿
+    lyric = token.get("lyric", "")
+    if lyric and len(lyric) > 2:
+        width += len(lyric) * 2  # 自行调系数
+
+    # dash
+    if token.get("duration") in (2,3,4):
+        dash_cnt = token["duration"] - 1
+        width += NOTE_DASH_OFFSET * dash_cnt
+
+    return width
+
+
+# —————————————————————————————————————————
+# 主要绘制函数
+# —————————————————————————————————————————
 def draw_sheet(notes, output_path):
-    from reportlab.pdfgen import canvas
-    from jianpu.symbols import get_dynamics_symbol
+    # —— 一次扫 metadata ——  
+    meta = {"key": "-", "time": "-/-", "tempo": 0}
+    real_notes = []
+    for token in notes:
+        if "key" in token:
+            meta["key"] = token["key"]
+        elif "time" in token:
+            meta["time"] = token["time"]
+        elif "tempo" in token:
+            try:
+                meta["tempo"] = int(token["tempo"])
+            except:
+                meta["tempo"] = 0
+        else:
+            real_notes.append(token)
 
+    # —— 打开画布，写页眉 ——  
     c = canvas.Canvas(output_path, pagesize=A4)
-    c.setFont(FONT_LYRIC, 18)
-    c.drawCentredString(PAGE_WIDTH / 2, PAGE_HEIGHT - TOP_MARGIN, TITLE)
+    c.setFont(FONT_LYRIC,18)
+    c.drawCentredString(PAGE_WIDTH/2, PAGE_HEIGHT-TOP_MARGIN, TITLE)
+    c.setFont(FONT_LYRIC,12)
+    c.drawString(LEFT_MARGIN, META_Y, f"调式: {meta['key']}")
+    c.drawString(LEFT_MARGIN+120, META_Y, f"节拍: {meta['time']}")
+    c.drawString(LEFT_MARGIN+240, META_Y, f"速度: ♩={meta['tempo']}")
 
-    # 查找调号/拍号/速度设置
-    key, time_signature, tempo = "-", "-/-", 0
-    for note in notes:
-        if "key" in note: key = note["key"]
-        if "time" in note: time_signature = note["time"]
-        if "tempo" in note: tempo = note["tempo"]
-        if key and time_signature and tempo: break
-
-    c.setFont(FONT_LYRIC, 12)
-    c.drawString(LEFT_MARGIN, META_Y, f"调式: {key}")
-    c.drawString(LEFT_MARGIN + 120, META_Y, f"节拍: {time_signature}")
-    c.drawString(LEFT_MARGIN + 240, META_Y, f"速度: ♩={tempo}")
+    # ② 主循环
     x, y = LEFT_MARGIN, PAGE_HEIGHT - START_Y_OFFSET
     note_positions = []
 
-    for note in notes:
-        if note.get("bar"):
-            c.line(x, y - 5, x, y + 15)
-            x += 10
-            continue
-        if note.get("repeat") in ["start", "end"]:
-            c.drawString(x, y + 15, REPEAT_SYMBOLS[note["repeat"]])
-            x += 10
-            continue
+    for token in real_notes:
+        # --------- 1) 计算本 token 宽度 ---------
+        tok_w = get_token_width(token)
 
-        if (note.get("key") or note.get("time_signature") or note.get("tempo")) and not note.get("lyric"):
-            continue
-
-        if not note.get("pitch") and not note.get("lyric") and not note.get("rest"):
-            continue  # 避免空 note 被绘制
-
-        draw_note(c, x, y, note)
-        note_positions.append((x, y, note))
-        if note.get("lyric") and len(note["lyric"]) > 2:
-            x += NOTE_STEP + len(note["lyric"]) * 2  # 或动态系数
-        else:
-            x += DURATION_WIDTH_MAP.get(note.get("duration", 1), NOTE_STEP)
-
-        if x > PAGE_WIDTH - RIGHT_MARGIN:
+        # --------- 2) 换行判定 ---------
+        if x + tok_w > PAGE_WIDTH - RIGHT_MARGIN:
             x = LEFT_MARGIN
             y -= LINE_HEIGHT
 
-    # 连音
-    # ----------- Tie 连音线渲染逻辑（支持 group + 跨行分段绘制） -----------
-    tie_groups = defaultdict(list)
+        # --------- 3) 绘制 ---------
+        if token.get("bar"):
+            c.line(x, y - 5, x, y + 15)
+        elif token.get("repeat") in ("start", "end"):
+            c.drawString(x, y + 15, REPEAT_SYMBOLS[token["repeat"]])
+        else:
+            draw_note(c, x, y, token)
+            note_positions.append((x, y, token))
 
-    # 1. 构建 tie 分组（支持 tie_group_id，兼容 legacy tie: true）
-    for idx, (x, y, note) in enumerate(note_positions):
-        if "tie_group_id" in note:
-            gid = note["tie_group_id"]
-            tie_groups[gid].append((x, y, note))
-        elif note.get("tie"):  # legacy 单段 tie: true
+        # --------- 4) 光标右移 ---------
+        x += tok_w
+
+    # ————————————————————
+    # 连音 (tie)
+    # ————————————————————
+    tie_groups = defaultdict(list)
+    for idx, (x0, y0, n0) in enumerate(note_positions):
+        if "tie_group_id" in n0:
+            tie_groups[n0["tie_group_id"]].append((x0, y0, n0))
+        elif n0.get("tie"):
             # 为每个 tie: true 的 note 自动构建一段 group（与下一个 note）
-            gid = f"__implicit_tie_{idx}__"
-            tie_groups[gid].append((x, y, note))
+            gid = f"implicit_tie_{idx}"
+            tie_groups[gid].append((x0, y0, n0))
             if idx + 1 < len(note_positions):
                 tie_groups[gid].append(note_positions[idx + 1])
 
     # 2. 渲染每组 tie（同行画，跨行跳过）
     for group in tie_groups.values():
         for i in range(len(group) - 1):
-            x1, y1, note1 = group[i]
-            x2, y2, note2 = group[i + 1]
+            x1, y1, _ = group[i]
+            x2, y2, _ = group[i + 1]
             if y1 != y2:
                 continue  # 跨行不连，自动断开
             y_base = y1 + TIE_ARC_BASE
@@ -82,45 +108,32 @@ def draw_sheet(notes, output_path):
             c.arc(x1 - 6, y_base, x2 + 6, y_base + TIE_ARC_HEIGHT, 0, 180)
             # c.setStrokeColorRGB(0, 0, 0)  # 恢复黑色
 
-        # 连线（beam）
-        # ✅ 先分组
-        beams = defaultdict(list)
-        for x, y, note in note_positions:
-            if "beam" in note:
-                beam_id = note["beam"]
-                beams[beam_id].append((x, y, note))
+    # ————————————————————
+    # beam（八分 / 十六分连接线）
+    # ————————————————————
+    beams = defaultdict(list)
+    for x0, y0, n0 in note_positions:
+        if "beam" in n0 and n0.get("duration", 1) <= 0.5:
+            beams[n0["beam"]].append((x0, y0, n0))
 
-        # ✅ 然后绘制 beam 连线
-        for beam_id, group in beams.items():
-            if len(group) < 2:
-                continue  # 单个音符不能连线
+    for _, group in beams.items():
+        # 按行分组，防跨行
+        rows = defaultdict(list)
+        for x0, y0, n0 in group:
+            rows[y0].append((x0, n0))
 
-            # ⛳ 按 Y 值（行号）分组，避免跨行连接
-            lines = defaultdict(list)
-            for x, y, note in group:
-                lines[y].append((x, y, note))
-
-            for y, line_group in lines.items():
-                if len(line_group) < 2:
-                    continue
-
-                x_start = line_group[0][0] - 6
-                x_end = line_group[-1][0] + 6
-
-                # ⛳ 决定 beam 横线层数（0.5 = 八分 = 一条；0.25 = 十六分 = 两条）
-                durations = [n.get("duration", 1) for _, _, n in line_group]
-                beam_level = max(2 if d == 0.25 else 1 for d in durations)
-
-                for i in range(beam_level):
-                    y_beam = y - BEAM_LINE_OFFSET - i * 3
-                    c.setLineWidth(1.2)
-                    c.line(x_start, y_beam, x_end, y_beam)
-        # 调试时添加
-        # for group in beams.values():
-        #     if len(group) >= 2:
-        #         x1, y1 = group[0]
-        #         x2, y2 = group[-1]
-        #         c.setStrokeColorRGB(1, 0, 0)
-        #         c.rect(x1 - 10, y1 - 10, x2 - x1 + 20, 20, stroke=1, fill=0)
+        for y0, row in rows.items():
+            if len(row) < 2:
+                continue
+            x_start = row[0][0] - 6
+            x_end = row[-1][0] + 6
+            level = max(2 if n.get("duration", 1) == 0.25 else 1
+                        for _, n in row)
+            for i in range(level):
+                c.setLineWidth(1.2)
+                c.line(x_start,
+                       y0 - BEAM_LINE_OFFSET - i * 3,
+                       x_end,
+                       y0 - BEAM_LINE_OFFSET - i * 3)
 
     c.save()

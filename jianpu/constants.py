@@ -33,14 +33,14 @@ DOT_OFFSET_Y_RATIO = 0.35   # 附点（节奏点）相对字体高度的垂直�
                
 
 TIE_ARC_HEIGHT = 12        # 连音线弧形的垂直高度（越大越弯）
-TIE_ARC_BASE = 5           # 连音线与音符中心点之间的起始高度偏移
+TIE_ARC_BASE = 10           # 连音线与音符中心点之间的起始高度偏移
 
 BEAM_LINE_OFFSET = 6      # 节拍连接横线（beam）距离音符中心的垂直偏移（负值表示下方）
 
-# ENABLE_NOTE_MIDLINE = True
-# HORIZONTAL_LINE_WIDTH = 1
-# HORIZONTAL_LINE_LENGTH_RATIO = 0.9  # 可设置为 NOTE_STEP * 0.9
-
+ENABLE_NOTE_MIDLINE = True
+HORIZONTAL_LINE_WIDTH = 1
+HORIZONTAL_LINE_LENGTH_RATIO = 0.9  # 可设置为 NOTE_STEP * 0.9
+NOTE_DASH_OFFSET = NOTE_STEP
 
 HIGH_DOT_X_OFFSET = -1.5   # 高音点（上点）相对于音符的左右偏移（负值偏左）
 HIGH_DOT_Y_OFFSET_RATIO = 1  # 高音点垂直偏移比例（相对字号）
@@ -48,12 +48,14 @@ LOW_DOT_Y_OFFSET_RATIO = 0.25    # 低音点垂直偏移比例（相对字号）
 
 META_Y = PAGE_HEIGHT - 80  # 元信息（调式、节拍、速度）显示位置 Y 坐标（接近页顶）
 
+BAR_WIDTH = 10
 
 # 增加节奏时值比例映射（相对单位）
 # duration 值含义：
 # 4: 四分音符，2: 二分音符，1: 全音符，0.5: 八分音符，0.25: 十六分音符
 DURATION_WIDTH_MAP = {
     4: NOTE_STEP * 4,    # 四分音符延长宽度
+    3: NOTE_STEP * 3,
     2: NOTE_STEP * 2,
     1: NOTE_STEP,
     0.5: NOTE_STEP / 2,

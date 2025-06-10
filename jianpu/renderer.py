@@ -70,21 +70,31 @@ def draw_note(c, x, y, note):
         c.setFont(FONT_NOTE, 10)
         c.drawCentredString(x, y + 24, sym)
 
-    # # 🎵 中横线节奏辅助线（简谱风格专用）
-    # if ENABLE_NOTE_MIDLINE:
-    #     duration = note.get("duration", 1)
-    #     dot = note.get("dot", False)
-    #     line_length = NOTE_STEP * 0.9
-    #     c.setLineWidth(1)
+    # 🎵 中横线节奏辅助线（简谱风格专用）
+    # === rhythm marker (节奏横线 / dash) ===
+    duration = note.get("duration", 1)
 
-    #     # 中横线应位于歌词下方（lyric 相对 y - 22，再往下移动 6）
-    #     line_y_base = y + LYRIC_OFFSET_Y - 6
+    # ---------- ① 下横线（八分 & 十六分） ----------
+    # if duration in (0.25, 0.5):
+    #     # 线数：十六分 2 条，八分 1 条
+    #     line_cnt = 2 if duration == 0.25 else 1
+    #     line_len = FONT_SIZE_NOTE * 0.9          # 横线长度
+    #     # 基准 y：数字底部稍下
+    #     base_y = y - FONT_SIZE_NOTE * 0.20
+    #     for i in range(line_cnt):
+    #         offset = i * 2.5                     # 多条线垂直间距
+    #         c.line(x - line_len/2, base_y - offset,
+    #             x + line_len/2, base_y - offset)
 
-    #     if duration == 2:
-    #         c.line(x - line_length / 2, line_y_base, x + line_length / 2, line_y_base)
-    #     elif duration == 4:
-    #         c.line(x - line_length / 2, line_y_base + 2, x + line_length / 2, line_y_base + 2)
-    #         c.line(x - line_length / 2, line_y_base - 2, x + line_length / 2, line_y_base - 2)
-    #         if dot:
-    #             c.line(x - line_length / 2, line_y_base, x + line_length / 2, line_y_base)
+    # ---------- ② 中横线 dash（二分 & 全音符） ----------
+    if duration in (2,3,4):
+        dash_cnt = 3 if duration == 4 else (2 if duration == 3 else 1)     # 全音符 3 个 dash，三分2个，二分 1 个
 
+        for i in range(dash_cnt):
+            dash_str = "-"
+            # 将 dash 画在数字右侧一点 (NOTE_DASH_OFFSET 可写在 constants.py)
+            c.setFont(FONT_NOTE, FONT_SIZE_NOTE)
+            c.drawString(x + NOTE_DASH_OFFSET*(i+1), y, dash_str)
+
+    # ---------- ③ 四分音符 duration==1: 无需标识 ----------
+    # 不做任何处理
