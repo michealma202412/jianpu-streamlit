@@ -32,8 +32,8 @@ DOT_OFFSET_Y_RATIO = 0.35   # 附点（节奏点）相对字体高度的垂直�
                            # 实际偏移 = FONT_SIZE_NOTE * 该比例
                
 
-TIE_ARC_HEIGHT = 12        # 连音线弧形的垂直高度（越大越弯）
-TIE_ARC_BASE = 10           # 连音线与音符中心点之间的起始高度偏移
+TIE_ARC_HEIGHT = 18        # 连音线弧形的垂直高度（越大越弯）
+TIE_ARC_BASE = 5           # 连音线与音符中心点之间的起始高度偏移
 
 BEAM_LINE_OFFSET = 6      # 节拍连接横线（beam）距离音符中心的垂直偏移（负值表示下方）
 

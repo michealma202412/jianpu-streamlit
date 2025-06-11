@@ -20,11 +20,13 @@ def get_min_token_width(token):
     else:
         base = DURATION_WIDTH_MAP.get(dur, NOTE_STEP)
 
-    # 歌词宽度测量（加一点 padding）
+    # 歌词宽度测量：  
+    # 如果歌词很长 (>2 字)，多留 NOTE_STEP 空间；否则保留行高缓冲
     lyric = token.get("lyric", "")
     if lyric:
         text_w = stringWidth(lyric, FONT_LYRIC, FONT_SIZE_LYRIC)
-        base = max(base, text_w + 6)   # 歌词留 6pt 缓冲
+        pad = FONT_SIZE_LYRIC  if len(lyric) <= 2 else FONT_SIZE_LYRIC * 1.2
+        base   = max(base, text_w + pad)
 
     # dash
     if dur in (2, 3, 4):
@@ -83,11 +85,15 @@ def draw_sheet(notes, output_path):
     note_positions = []
     for line in lines:
         total_min = sum(w for _, w in line)
-        # 1) 给每个 gap 打权重：dash 前的 gap=0，其它 gap=1
+        # 给每个 gap 打权重：bar 前/后 和 带 dash 的“不分配额外空白”，其它 gap=1
         gap_weights = []
         for i in range(len(line)-1):
-            tok, _ = line[i]
-            gap_weights.append(0 if tok.get("duration") in (2,3,4) else 1)
+            curr, _ = line[i]
+            nxt,  _ = line[i+1]
+            if curr.get("bar") or nxt.get("bar") or curr.get("duration") in (2,3,4):
+                gap_weights.append(0)
+            else:
+                gap_weights.append(1)
         total_weight = sum(gap_weights) or 1
         # 2) 按权重分配剩余空间
         extra_unit = max(0, (max_w - total_min) / total_weight)
@@ -97,7 +103,9 @@ def draw_sheet(notes, output_path):
 
             # 小节线
             if token.get("bar"):
-                c.line(x, y-5, x, y+15)
+                # 小节线左移 NOTE_STEP*0.1，更贴近上一音符
+                bar_x = x - NOTE_STEP*0.1
+                c.line(bar_x, y-5, bar_x, y+15)
             elif token.get("repeat") in ("start","end"):
                 c.drawString(x, y+15, REPEAT_SYMBOLS[token["repeat"]])
             else:
