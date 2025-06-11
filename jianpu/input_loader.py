@@ -7,6 +7,7 @@ def txt_to_json(txt: str):
     lines = [line.strip() for line in txt.strip().splitlines() if line.strip()]
     result = []
     beat_counter = 0.0  # 拍子累加器，用于自动加 bar
+    beats_per_bar = 4     # 默认每小节4拍，见 time: "4/4"
 
     for line in lines:
         # 元信息行（如 key: G）
@@ -15,7 +16,15 @@ def txt_to_json(txt: str):
                 k, v = line.split(":", 1)
                 k = k.strip()
                 v = v.strip().strip('"')
-                if k == "tempo":
+                if k == "time":
+                    # 解析拍号 X/Y，取 X 作为每小节拍数
+                    try:
+                        beats_per_bar = int(v.split("/")[0])
+                    except:
+                        beats_per_bar = 4
+                    result.append({k: v})
+                    continue
+                elif k == "tempo":
                     result.append({k: int(v)})
                 else:
                     result.append({k: v})
@@ -58,8 +67,9 @@ def txt_to_json(txt: str):
             result.append(note)
 
             # 判断是否自动插入 bar
-            if beat_counter >= 4:
-                result.append({"bar": True})
-                beat_counter -= 4  # 支持剩余节拍继续累加
+            # beats_per_bar 从前面解析 time: "X/Y" 得到 X
+            if beat_counter >= beats_per_bar:
+                result.append({"bar":True})
+                beat_counter -= beats_per_bar
 
     return result
