@@ -122,16 +122,15 @@ def draw_sheet(notes, output_path):
         y -= LINE_HEIGHT
 
     # ————————————————————
-    # 连音 (tie)
+    # 连音 (tie) & 跨行半连音线
     # ————————————————————
     tie_groups = defaultdict(list)
     for idx, (x0, y0, n0) in enumerate(note_positions):
-        if "tie_group_id" in n0:
-            tie_groups[n0["tie_group_id"]].append((x0, y0, n0))
-        elif n0.get("tie"):
-            # 为每个 tie: true 的 note 自动构建一段 group（与下一个 note）
-            gid = f"implicit_tie_{idx}"
+        if n0.get("tie"):
+            # 直接使用 idx 生成显式组，或复用已有 tie_group_id
+            gid = n0.get("tie_group_id", f"implicit_tie_{idx}")
             tie_groups[gid].append((x0, y0, n0))
+            # 与下一 note 连
             if idx + 1 < len(note_positions):
                 tie_groups[gid].append(note_positions[idx + 1])
 
@@ -140,12 +139,27 @@ def draw_sheet(notes, output_path):
         for i in range(len(group) - 1):
             x1, y1, _ = group[i]
             x2, y2, _ = group[i + 1]
-            if y1 != y2:
-                continue  # 跨行不连，自动断开
-            y_base = y1 + TIE_ARC_BASE
-            # c.setStrokeColorRGB(0.1, 0.8, 0.1)  # 绿色辅助
-            c.arc(x1 - 6, y_base, x2 + 6, y_base + TIE_ARC_HEIGHT, 0, 180)
-            # c.setStrokeColorRGB(0, 0, 0)  # 恢复黑色
+            # 同行完整连音
+            if y1 == y2:
+                y_base = y1 + TIE_ARC_BASE
+                c.arc(x1 - 6, y_base, x2 + 6, y_base + TIE_ARC_HEIGHT, 0, 180)
+            else:
+                # 跨行半连：行尾画半弧（从180°到270°）
+                right_edge = PAGE_WIDTH - RIGHT_MARGIN
+                yb1 = y1 + TIE_ARC_BASE
+                c.arc(
+                    x1 - 6, yb1,
+                    right_edge, yb1 + TIE_ARC_HEIGHT,
+                    90, 90
+                )
+                # 行首画半弧（从270°到360°）
+                left_edge = LEFT_MARGIN
+                yb2 = y2 + TIE_ARC_BASE
+                c.arc(
+                    left_edge - 6, yb2,
+                    x2 + 6, yb2 + TIE_ARC_HEIGHT,
+                    0, 90
+                )
 
     # ————————————————————
     # beam（八分 / 十六分连接线）
