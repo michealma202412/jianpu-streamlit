@@ -80,16 +80,16 @@ def draw_note(c, x, y, note):
     duration = note.get("duration", 1)
 
     # ---------- ① 下横线（八分 & 十六分） ----------
-    if duration in (0.25, 0.5):
-        # 线数：十六分 2 条，八分 1 条
-        line_cnt = 2 if duration == 0.25 else 1
-        line_len = FONT_SIZE_NOTE * 0.9          # 横线长度
-        # 基准 y：数字底部稍下
-        base_y = y - FONT_SIZE_NOTE * 0.20
-        for i in range(line_cnt):
-            offset = i * 2.5                     # 多条线垂直间距
-            c.line(x - line_len/2, base_y - offset,
-                x + line_len/2, base_y - offset)
+    # if duration in (0.25, 0.5):
+    #     # 线数：十六分 2 条，八分 1 条
+    #     line_cnt = 2 if duration == 0.25 else 1
+    #     line_len = FONT_SIZE_NOTE * 0.9          # 横线长度
+    #     # 基准 y：数字底部稍下
+    #     base_y = y - FONT_SIZE_NOTE * 0.20
+    #     for i in range(line_cnt):
+    #         offset = i * 2.5                     # 多条线垂直间距
+    #         c.line(x - line_len/2, base_y - offset,
+    #             x + line_len/2, base_y - offset)
 
     # ---------- ② 中横线 dash（二分 & 全音符） ----------
     if duration in (2, 3, 4):

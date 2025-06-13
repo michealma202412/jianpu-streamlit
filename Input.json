@@ -199,12 +199,14 @@
   {
     "pitch": -6,
     "duration": 0.5,
-    "lyric": "保"
+    "lyric": "保",
+    "beam": "i"
   },
   {
     "pitch": -7,
     "duration": 0.5,
-    "lyric": "守"
+    "lyric": "守",
+    "beam": "i"
   },
   {
     "bar": true
@@ -442,12 +444,14 @@
   {
     "pitch": -6,
     "duration": 0.5,
-    "lyric": "使"
+    "lyric": "使",
+    "beam": "j"
   },
   {
     "pitch": -7,
     "duration": 0.5,
-    "lyric": "我"
+    "lyric": "我",
+    "beam": "j"
   },
   {
     "bar": true
