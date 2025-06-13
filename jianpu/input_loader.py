@@ -16,7 +16,11 @@ def txt_to_json(txt: str):
                 k, v = line.split(":", 1)
                 k = k.strip()
                 v = v.strip().strip('"')
-                if k == "time":
+                if k == "title":
+                    # 解析歌曲标题
+                    result.append({"title": v})
+                    continue
+                elif k == "time":
                     # 解析拍号 X/Y，取 X 作为每小节拍数
                     try:
                         beats_per_bar = int(v.split("/")[0])
@@ -26,6 +30,9 @@ def txt_to_json(txt: str):
                     continue
                 elif k == "tempo":
                     result.append({k: int(v)})
+                    # 解析歌曲作者
+                    result.append({"author": v})
+                    continue
                 else:
                     result.append({k: v})
             except Exception as e:

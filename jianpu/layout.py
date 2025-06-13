@@ -39,10 +39,12 @@ def get_min_token_width(token):
 
 def draw_sheet(notes, output_path):
     # —— 一次扫 metadata ——  
-    meta = {"key": "-", "time": "-/-", "tempo": 0}
+    meta = {"title": None, "key": "-", "time": "-/-", "tempo": 0, "author": None}
     real_notes = []
     for token in notes:
-        if "key" in token:
+        if "title" in token:
+            meta["title"] = token["title"]
+        elif "key" in token:
             meta["key"] = token["key"]
         elif "time" in token:
             meta["time"] = token["time"]
@@ -51,18 +53,23 @@ def draw_sheet(notes, output_path):
                 meta["tempo"] = int(token["tempo"])
             except:
                 meta["tempo"] = 0
+        elif "author" in token:
+            meta["author"] = token["author"]
         else:
             real_notes.append(token)
 
     # —— 打开画布，写页眉 ——  
     c = canvas.Canvas(output_path, pagesize=A4)
-    c.setFont(FONT_LYRIC,18)
-    c.drawCentredString(PAGE_WIDTH/2, PAGE_HEIGHT-TOP_MARGIN, TITLE)
+    # 若 TXT 中解析到 title，则显示，否则用默认常量
+    display_title = meta.get("title") or TITLE
+    c.setFont(FONT_LYRIC, 18)
+    c.drawCentredString(PAGE_WIDTH/2, PAGE_HEIGHT-TOP_MARGIN, display_title)
     c.setFont(FONT_LYRIC,12)
     c.drawString(LEFT_MARGIN, META_Y, f"调式: {meta['key']}")
     c.drawString(LEFT_MARGIN+120, META_Y, f"节拍: {meta['time']}")
-    c.drawString(LEFT_MARGIN+240, META_Y, f"速度: ♩={meta['tempo']}")
-
+    c.drawString(LEFT_MARGIN+240, META_Y, f"速度: {meta['tempo']}")
+    if meta.get("author"):
+        c.drawString(LEFT_MARGIN+360, META_Y, f"作者: {meta['author']}")
     # —— 分行 & 计算最小宽度 —
     max_w = PAGE_WIDTH - LEFT_MARGIN - RIGHT_MARGIN
     lines = []
