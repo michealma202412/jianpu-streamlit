@@ -200,9 +200,13 @@ def draw_sheet(notes, output_path):
                 this_extra = min(this_extra, NOTE_STEP*1.2)
                 x += this_extra
 
-        # —— 2) 画完这一行之后，下移：标准行高 + 多出歌词行占用的高度
+        # —— 2) 画完这一行之后，下移：取 LINE_HEIGHT 与歌词底部到下行基线的最小安全距离二者最大，再加上多行歌词占用的高度
         extra_v = (max_rows - 1) * (FONT_SIZE_LYRIC + 2)
-        y -= LINE_HEIGHT + extra_v
+        # 计算从音符中心到歌词底部的距离，再加上一个小缓冲
+        min_gap = abs(LYRIC_OFFSET_Y) + max(FONT_SIZE_LYRIC , FONT_SIZE_NOTE)*2
+        # 最终行距 = max(标准行高, min_gap) + 额外行高
+        row_gap = max(LINE_HEIGHT, min_gap) + extra_v
+        y -= row_gap
 
     # ————————————————————
     # 连音 (tie) & 跨行半连音线
@@ -268,8 +272,8 @@ def draw_sheet(notes, output_path):
             for i in range(level):
                 c.setLineWidth(1.2)
                 c.line(x_start,
-                       y0 - BEAM_LINE_OFFSET - i * 3,
+                       y0 - BEAM_LINE_OFFSET * ( 1 + i ),
                        x_end,
-                       y0 - BEAM_LINE_OFFSET - i * 3)
+                       y0 - BEAM_LINE_OFFSET * ( 1 + i ))
 
     c.save()

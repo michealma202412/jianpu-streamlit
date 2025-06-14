@@ -93,25 +93,27 @@ def draw_note(c, x, y, note):
         line_cnt = 2 if duration == 0.25 else 1
         line_len = FONT_SIZE_NOTE * 0.7          # 横线长度
         # 基准 y：数字底部稍下
-        base_y = y - FONT_SIZE_NOTE * 0.38
+        base_y = y - BEAM_LINE_OFFSET
         for i in range(line_cnt):
-            offset = i * 2.5                     # 多条线垂直间距
+            offset = i * BEAM_LINE_OFFSET                     # 多条线垂直间距
             c.line(x - line_len/2, base_y - offset,
                 x + line_len/2, base_y - offset)
 
     # ---------- ② 中横线 dash（二分 & 全音符） ----------
-    if duration in (2, 3, 4):
+    elif duration in (2, 3, 4):
         dash_cnt = int(duration) - 1
+        # 计算数字宽度，用来偏移横线起点
         pitch_symbol = get_pitch_symbol(pitch_num)
         symbol_w = stringWidth(pitch_symbol, FONT_NOTE, font_size)
         # 从数字右侧稍微偏移
         start_x = x + symbol_w/2 + 2
-        # 线段长度：比原来NOTE_DASH_OFFSET再拉长一些
+        # 横线总长（每个 dash 同 NOTE_DASH_OFFSET），间隔 gap
         dash_len = NOTE_DASH_OFFSET
-        # dash 之间的间隔
-        gap = 4
-        # dash 绘制位置提升到音符中心和歌词中心的中点
-        dash_y = y - LYRIC_OFFSET_Y / 4
+        gap = NOTE_STEP/3
+        # 纵向居中：在 note 中心 (y)
+        dash_y = y + FONT_SIZE_NOTE * DOT_OFFSET_Y_RATIO
+
+
         c.setLineWidth(1.2)
         for i in range(dash_cnt):
             seg_x = start_x + i * (dash_len + gap)
