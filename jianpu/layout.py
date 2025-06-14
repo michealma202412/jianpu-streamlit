@@ -93,25 +93,45 @@ def draw_sheet(notes, output_path):
     for line in lines:
         total_min = sum(w for _, w in line)
         # 给每个 gap 打权重：bar 前/后 和 带 dash 的“不分配额外空白”，其它 gap=1
+        # === 改进版 gap 权重 & 限制最大拉伸 ===
+        # 普通 gap 权重 1，bar/dash gap 权重 EPS（≈0.2）
+        EPS = 0.2  
         gap_weights = []
         for i in range(len(line)-1):
             curr, _ = line[i]
             nxt,  _ = line[i+1]
-            if curr.get("bar") or nxt.get("bar") or curr.get("duration") in (2,3,4):
-                gap_weights.append(0)
+            if not nxt.get("lyric"):
+                gap_weights.append(EPS)  # 而不是 1
+            elif curr.get("bar") or nxt.get("bar") or curr.get("duration") in (1.5, 2, 3, 4):
+                gap_weights.append(EPS)
             else:
                 gap_weights.append(1)
-        total_weight = sum(gap_weights) or 1
-        # 2) 按权重分配剩余空间
-        extra_unit = max(0, (max_w - total_min) / total_weight)
+        total_weight = sum(gap_weights)
+        if total_weight <= 0:
+            extra_unit = 0
+        else:
+            # 计算每个 weight 单位对应的额外空间
+            raw_extra = max(0, (max_w - total_min) / total_weight)
+            # 给每个 gap 的额外空间加上一个上限，比如不超过 NOTE_STEP * 1.5
+            max_extra_per_unit = NOTE_STEP * 1.5
+            extra_unit = min(raw_extra, max_extra_per_unit)
 
         x = LEFT_MARGIN
         for idx, (token, min_w) in enumerate(line):
 
             # 小节线
             if token.get("bar"):
-                # 小节线左移 NOTE_STEP*0.1，更贴近上一音符
-                bar_x = x - NOTE_STEP*0.1
+                 # 如果不是这一行的第一个 token，就减掉它前面的空白（extra_unit * gap_weights[idx-1]）
+                prev_extra = extra_unit * gap_weights[idx-1] if idx > 0 else 0
+                # 2) 动态偏移：上一元素 min_w 的 40%（如果有上一元素），否则默认半个 NOTE_STEP
+                if idx > 0:
+                    _, prev_w = line[idx-1]
+                    shift = prev_w * 0.4
+                else:
+                    shift = NOTE_STEP * 0.5
+                
+                # 最终 x 坐标
+                bar_x = x - shift - prev_extra
                 c.line(bar_x, y-5, bar_x, y+15)
             elif token.get("repeat") in ("start","end"):
                 c.drawString(x, y+15, REPEAT_SYMBOLS[token["repeat"]])
@@ -124,7 +144,9 @@ def draw_sheet(notes, output_path):
             x += min_w
             # 再根据 weight 分配 extra（dash 前 weight=0，就不会加空白）
             if idx < len(line) - 1:
-                x += extra_unit * gap_weights[idx]
+                this_extra = extra_unit * gap_weights[idx]
+                this_extra = min(this_extra, NOTE_STEP*1.2)
+                x += this_extra
 
         y -= LINE_HEIGHT
 
