@@ -62,12 +62,20 @@ def draw_note(c, x, y, note):
         c.setFont(FONT_NOTE, font_size)
         c.drawCentredString(x, y, "0")  # 避免显示不出的休止符 𝄽
 
-    # 歌词
-    lyric = note.get("lyric", "")
-    if lyric:
+    # 歌词：支持单行或多行（字符串里的 '\n' 或 list）
+    raw = note.get("lyric") or note.get("lyrics")
+    if raw is not None:
+        # 先把 "\\n" 形式也替换
+        text = raw.replace("\\\\n", "\n") if isinstance(raw, str) else raw
+        if isinstance(text, (list, tuple)):
+            lines = [str(l) for l in text]
+        else:
+            lines = str(text).split("\n")
         c.setFont(FONT_LYRIC, FONT_SIZE_LYRIC)
-        c.drawCentredString(x, y + LYRIC_OFFSET_Y, lyric)
-
+        for i, ln in enumerate(lines):
+            # 第一行用原偏移，后续行依次再往下
+            dy = LYRIC_OFFSET_Y - i * (FONT_SIZE_LYRIC + 2)
+            c.drawCentredString(x, y + dy, ln)
     # 力度
     dynamics = note.get("dynamics")
     if dynamics:

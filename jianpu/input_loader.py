@@ -60,6 +60,10 @@ def txt_to_json(txt: str):
                 else:
                     note[k] = v
 
+            # 如果 lyric 里有文字“\n”，把它转成真正的换行
+            if "lyric" in note and isinstance(note["lyric"], str):
+                note["lyric"] = note["lyric"].replace("\\n", "\n")
+
             # 自动补全 rest:true
             if note.get("pitch") == 0 and "rest" not in note:
                 note["rest"] = True

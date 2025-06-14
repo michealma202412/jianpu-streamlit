@@ -14,18 +14,18 @@
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "愿",
+    "lyric": "愿\n愿",
     "dot": true
   },
   {
     "pitch": 3,
     "duration": 0.5,
-    "lyric": "至"
+    "lyric": "至\n上"
   },
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "高"
+    "lyric": "高\n帝"
   },
   {
     "bar": true
@@ -33,12 +33,12 @@
   {
     "pitch": 4,
     "duration": 2,
-    "lyric": "上"
+    "lyric": "上\n出"
   },
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "帝"
+    "lyric": "帝\n人"
   },
   {
     "bar": true
@@ -46,24 +46,24 @@
   {
     "pitch": 2,
     "duration": 1,
-    "lyric": "圣"
+    "lyric": "圣\n意"
   },
   {
     "pitch": 2,
     "duration": 0.5,
-    "lyric": "父",
+    "lyric": "父\n料",
     "beam": "a"
   },
   {
     "pitch": 2,
     "duration": 0.5,
-    "lyric": "的",
+    "lyric": "的\n的",
     "beam": "a"
   },
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "平"
+    "lyric": "平\n平"
   },
   {
     "bar": true
@@ -71,7 +71,7 @@
   {
     "pitch": 1,
     "duration": 3,
-    "lyric": "安，"
+    "lyric": "安，\n安，"
   },
   {
     "bar": true
@@ -79,18 +79,18 @@
   {
     "pitch": 5,
     "duration": 1,
-    "lyric": "愿",
+    "lyric": "愿\n愿",
     "dot": true
   },
   {
     "pitch": 5,
     "duration": 0.5,
-    "lyric": "复"
+    "lyric": "复\n使"
   },
   {
     "pitch": 5,
     "duration": 1,
-    "lyric": "活"
+    "lyric": "活\n我"
   },
   {
     "bar": true
@@ -98,12 +98,12 @@
   {
     "pitch": 6,
     "duration": 2,
-    "lyric": "基"
+    "lyric": "基\n们"
   },
   {
     "pitch": 5,
     "duration": 1,
-    "lyric": "督"
+    "lyric": "督\n成"
   },
   {
     "bar": true
@@ -111,17 +111,17 @@
   {
     "pitch": 4,
     "duration": 1,
-    "lyric": "圣"
+    "lyric": "圣\n圣"
   },
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "子"
+    "lyric": "子\n的"
   },
   {
     "pitch": 1,
     "duration": 1,
-    "lyric": "恩"
+    "lyric": "恩\n恩"
   },
   {
     "bar": true
@@ -129,7 +129,7 @@
   {
     "pitch": 2,
     "duration": 3,
-    "lyric": "典，"
+    "lyric": "典，\n典，"
   },
   {
     "bar": true
@@ -137,18 +137,18 @@
   {
     "pitch": 1,
     "duration": 1,
-    "lyric": "愿",
+    "lyric": "愿\n愿",
     "dot": true
   },
   {
     "pitch": 1,
     "duration": 0.5,
-    "lyric": "圣"
+    "lyric": "圣\n圣"
   },
   {
     "pitch": 1,
     "duration": 1,
-    "lyric": "灵"
+    "lyric": "灵\n灵"
   },
   {
     "bar": true
@@ -156,12 +156,12 @@
   {
     "pitch": 3,
     "duration": 2,
-    "lyric": "团"
+    "lyric": "团\n契"
   },
   {
     "pitch": 1,
     "duration": 1,
-    "lyric": "契"
+    "lyric": "契\n合"
   },
   {
     "bar": true
@@ -169,24 +169,24 @@
   {
     "pitch": 2,
     "duration": 1,
-    "lyric": "常"
+    "lyric": "常\n相"
   },
   {
     "pitch": 2,
     "duration": 0.5,
-    "lyric": "在",
+    "lyric": "在\n交",
     "beam": "b"
   },
   {
     "pitch": 2,
     "duration": 0.5,
-    "lyric": "他",
+    "lyric": "他\n的",
     "beam": "b"
   },
   {
     "pitch": 2,
     "duration": 1,
-    "lyric": "爱"
+    "lyric": "爱\n团"
   },
   {
     "bar": true
@@ -194,18 +194,18 @@
   {
     "pitch": 6,
     "duration": 2,
-    "lyric": "里"
+    "lyric": "里，\n契，"
   },
   {
     "pitch": -6,
     "duration": 0.5,
-    "lyric": "保",
+    "lyric": "保\n使",
     "beam": "i"
   },
   {
     "pitch": -7,
     "duration": 0.5,
-    "lyric": "守",
+    "lyric": "守\n我",
     "beam": "i"
   },
   {
@@ -214,18 +214,18 @@
   {
     "pitch": 1,
     "duration": 1,
-    "lyric": "我",
+    "lyric": "我\n们",
     "dot": true
   },
   {
     "pitch": 3,
     "duration": 0.5,
-    "lyric": "们"
+    "lyric": "们\n心"
   },
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "心"
+    "lyric": "心\n灵"
   },
   {
     "bar": true
@@ -233,17 +233,17 @@
   {
     "pitch": 2,
     "duration": 1,
-    "lyric": "怀"
+    "lyric": "怀\n合"
   },
   {
     "pitch": 2,
     "duration": 1,
-    "lyric": "和"
+    "lyric": "和\n而"
   },
   {
     "pitch": 3,
     "duration": 1,
-    "lyric": "意"
+    "lyric": "意\n为"
   },
   {
     "bar": true
@@ -251,252 +251,7 @@
   {
     "pitch": 1,
     "duration": 3,
-    "lyric": "念。"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "愿",
-    "dot": true
-  },
-  {
-    "pitch": 3,
-    "duration": 0.5,
-    "lyric": "上"
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "帝"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 4,
-    "duration": 2,
-    "lyric": "出"
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "人"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 2,
-    "duration": 1,
-    "lyric": "意"
-  },
-  {
-    "pitch": 2,
-    "duration": 0.5,
-    "lyric": "料",
-    "beam": "c"
-  },
-  {
-    "pitch": 2,
-    "duration": 0.5,
-    "lyric": "的",
-    "beam": "c"
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "平"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 1,
-    "duration": 3,
-    "lyric": "安，"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 5,
-    "duration": 1,
-    "lyric": "愿",
-    "dot": true
-  },
-  {
-    "pitch": 5,
-    "duration": 0.5,
-    "lyric": "使"
-  },
-  {
-    "pitch": 5,
-    "duration": 1,
-    "lyric": "我"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 6,
-    "duration": 2,
-    "lyric": "们"
-  },
-  {
-    "pitch": 5,
-    "duration": 1,
-    "lyric": "成"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 4,
-    "duration": 1,
-    "lyric": "圣"
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "的"
-  },
-  {
-    "pitch": 1,
-    "duration": 1,
-    "lyric": "恩"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 2,
-    "duration": 3,
-    "lyric": "典，"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 1,
-    "duration": 1,
-    "lyric": "愿",
-    "dot": true
-  },
-  {
-    "pitch": 1,
-    "duration": 0.5,
-    "lyric": "圣"
-  },
-  {
-    "pitch": 1,
-    "duration": 1,
-    "lyric": "灵"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 3,
-    "duration": 2,
-    "lyric": "契"
-  },
-  {
-    "pitch": 1,
-    "duration": 1,
-    "lyric": "合"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 2,
-    "duration": 1,
-    "lyric": "相"
-  },
-  {
-    "pitch": 2,
-    "duration": 0.5,
-    "lyric": "交",
-    "beam": "d"
-  },
-  {
-    "pitch": 2,
-    "duration": 0.5,
-    "lyric": "的",
-    "beam": "d"
-  },
-  {
-    "pitch": 2,
-    "duration": 1,
-    "lyric": "团"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 6,
-    "duration": 2,
-    "lyric": "契，"
-  },
-  {
-    "pitch": -6,
-    "duration": 0.5,
-    "lyric": "使",
-    "beam": "j"
-  },
-  {
-    "pitch": -7,
-    "duration": 0.5,
-    "lyric": "我",
-    "beam": "j"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 1,
-    "duration": 1,
-    "lyric": "们",
-    "dot": true
-  },
-  {
-    "pitch": 3,
-    "duration": 0.5,
-    "lyric": "心"
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "灵"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 2,
-    "duration": 1,
-    "lyric": "合"
-  },
-  {
-    "pitch": 2,
-    "duration": 1,
-    "lyric": "而"
-  },
-  {
-    "pitch": 3,
-    "duration": 1,
-    "lyric": "为"
-  },
-  {
-    "bar": true
-  },
-  {
-    "pitch": 1,
-    "duration": 3,
-    "lyric": "一。",
+    "lyric": "念。\n一。",
     "tie": true
   },
   {
