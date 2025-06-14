@@ -102,18 +102,19 @@ def draw_note(c, x, y, note):
     # ---------- ② 中横线 dash（二分 & 全音符） ----------
     if duration in (2, 3, 4):
         dash_cnt = int(duration) - 1
-        dash_str = "-"
-        # 1) 计算 dash 自身宽度
-        dash_w = stringWidth(dash_str, FONT_NOTE, font_size)
-        # 2) 计算数字本身宽度，保证 dash 紧贴数字
         pitch_symbol = get_pitch_symbol(pitch_num)
         symbol_w = stringWidth(pitch_symbol, FONT_NOTE, font_size)
-        # 3) 起始 X：数字中心 + half_width + 少许 padding
+        # 从数字右侧稍微偏移
         start_x = x + symbol_w/2 + 2
-        # 4) 画 dash，每个 dash 之间留 2pt 微小间隔
-        c.setFont(FONT_NOTE, font_size)
+        # 线段长度：比原来NOTE_DASH_OFFSET再拉长一些
+        dash_len = NOTE_DASH_OFFSET
+        # dash 之间的间隔
+        gap = 4
+        # dash 绘制位置提升到音符中心和歌词中心的中点
+        dash_y = y - LYRIC_OFFSET_Y / 4
+        c.setLineWidth(1.2)
         for i in range(dash_cnt):
-            c.drawString(start_x + i * (dash_w + 2), y, dash_str)
-
+            seg_x = start_x + i * (dash_len + gap)
+            c.line(seg_x, dash_y, seg_x + dash_len, dash_y)
     # ---------- ③ 四分音符 duration==1: 无需标识 ----------
     # 不做任何处理
