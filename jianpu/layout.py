@@ -45,7 +45,8 @@ def get_min_token_width(token):
 
 def draw_sheet(notes, output_path):
     # —— 一次扫 metadata ——  
-    meta = {"title": None, "key": "-", "time": "-/-", "tempo": 0, "author": None}
+    meta = {"title": None, "key": "-", "time": "-/-", "tempo": 0,
+            "composer": None, "lyricist": None}
     real_notes = []
     for token in notes:
         if "title" in token:
@@ -59,8 +60,10 @@ def draw_sheet(notes, output_path):
                 meta["tempo"] = int(token["tempo"])
             except:
                 meta["tempo"] = 0
-        elif "author" in token:
-            meta["author"] = token["author"]
+        elif "composer" in token:
+            meta["composer"] = token["composer"]
+        elif "lyricist" in token:
+            meta["lyricist"] = token["lyricist"]
         else:
             real_notes.append(token)
 
@@ -73,9 +76,12 @@ def draw_sheet(notes, output_path):
     c.setFont(FONT_LYRIC,12)
     c.drawString(LEFT_MARGIN, META_Y, f"调式: {meta['key']}")
     c.drawString(LEFT_MARGIN+120, META_Y, f"节拍: {meta['time']}")
-    c.drawString(LEFT_MARGIN+240, META_Y, f"速度: {meta['tempo']}")
-    if meta.get("author"):
-        c.drawString(LEFT_MARGIN+360, META_Y, f"作者: {meta['author']}")
+    if meta['tempo'] > 0:
+        c.drawString(LEFT_MARGIN+200, META_Y, f"速度: {meta['tempo']}")
+    if meta.get("lyricist"):
+        c.drawString(LEFT_MARGIN+300, META_Y, f"作词: {meta['lyricist']}")
+    if meta.get("composer"):
+        c.drawString(LEFT_MARGIN+400, META_Y, f"作曲: {meta['composer']}")
     # —— 分行 & 计算最小宽度 —
     max_w = PAGE_WIDTH - LEFT_MARGIN - RIGHT_MARGIN
     lines = []

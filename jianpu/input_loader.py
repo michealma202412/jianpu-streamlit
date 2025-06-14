@@ -20,6 +20,12 @@ def txt_to_json(txt: str):
                     # 解析歌曲标题
                     result.append({"title": v})
                     continue
+                elif k == "composer":
+                    result.append({"composer": v})
+                    continue
+                elif k == "lyricist":
+                    result.append({"lyricist": v})
+                    continue
                 elif k == "time":
                     # 解析拍号 X/Y，取 X 作为每小节拍数
                     try:
@@ -30,8 +36,6 @@ def txt_to_json(txt: str):
                     continue
                 elif k == "tempo":
                     result.append({k: int(v)})
-                    # 解析歌曲作者
-                    result.append({"author": v})
                     continue
                 else:
                     result.append({k: v})
