@@ -26,6 +26,9 @@ def txt_to_json(txt: str):
                 elif k == "lyricist":
                     result.append({"lyricist": v})
                     continue
+                elif k == "translator":
+                    result.append({"translator": v})
+                    continue
                 elif k == "time":
                     # 解析拍号 X/Y，取 X 作为每小节拍数
                     try:

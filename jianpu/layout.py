@@ -46,7 +46,7 @@ def get_min_token_width(token):
 def draw_sheet(notes, output_path):
     # —— 一次扫 metadata ——  
     meta = {"title": None, "key": "-", "time": "-/-", "tempo": 0,
-            "composer": None, "lyricist": None}
+            "composer": None, "lyricist": None, "translator": None}
     real_notes = []
     for token in notes:
         if "title" in token:
@@ -64,6 +64,8 @@ def draw_sheet(notes, output_path):
             meta["composer"] = token["composer"]
         elif "lyricist" in token:
             meta["lyricist"] = token["lyricist"]
+        elif "translator" in token:
+            meta["translator"] = token["translator"]
         else:
             real_notes.append(token)
 
@@ -74,14 +76,42 @@ def draw_sheet(notes, output_path):
     c.setFont(FONT_LYRIC, 18)
     c.drawCentredString(PAGE_WIDTH/2, PAGE_HEIGHT-TOP_MARGIN, display_title)
     c.setFont(FONT_LYRIC,12)
-    c.drawString(LEFT_MARGIN, META_Y, f"调式: {meta['key']}")
-    c.drawString(LEFT_MARGIN+120, META_Y, f"节拍: {meta['time']}")
-    if meta['tempo'] > 0:
-        c.drawString(LEFT_MARGIN+200, META_Y, f"速度: {meta['tempo']}")
+    # 先画调式
+    x = LEFT_MARGIN
+    c.setFont(FONT_LYRIC, 12)
+    text = f"调式: {meta['key']}"
+    c.drawString(x, META_Y, text)
+    # 用 stringWidth 测量这段文字的真实宽度，再加上一个固定间隔
+    x += stringWidth(text, FONT_LYRIC, 12) + 20
+
+    # 然后画节拍
+    text = f"节拍: {meta['time']}"
+    c.drawString(x, META_Y, text)
+    x += stringWidth(text, FONT_LYRIC, 12) + 20
+
+    # 如果有速度才画，并且才推进游标
+    if meta.get("tempo", 0) > 0:
+        text = f"速度: {meta['tempo']}"
+        c.drawString(x, META_Y, text)
+        x += stringWidth(text, FONT_LYRIC, 12) + 20
+
+    # 作词
     if meta.get("lyricist"):
-        c.drawString(LEFT_MARGIN+300, META_Y, f"作词: {meta['lyricist']}")
+        text = f"作词: {meta['lyricist']}"
+        c.drawString(x, META_Y, text)
+        x += stringWidth(text, FONT_LYRIC, 12) + 20
+
+    # 翻译
+    if meta.get("translator"):
+        text = f"翻译: {meta['translator']}"
+        c.drawString(x, META_Y, text)
+        x += stringWidth(text, FONT_LYRIC, 12) + 20
+
+    # 作曲
     if meta.get("composer"):
-        c.drawString(LEFT_MARGIN+400, META_Y, f"作曲: {meta['composer']}")
+        text = f"作曲: {meta['composer']}"
+        c.drawString(x, META_Y, text)
+        x += stringWidth(text, FONT_LYRIC, 12) + 20
     # —— 分行 & 计算最小宽度 —
     max_w = PAGE_WIDTH - LEFT_MARGIN - RIGHT_MARGIN
     lines = []
