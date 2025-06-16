@@ -229,13 +229,13 @@ def draw_sheet(notes, output_path):
             # 同行完整连音
             if y1 == y2:
                 y_base = y1 + TIE_ARC_BASE
-                c.arc(x1 - 6, y_base, x2 + 6, y_base + TIE_ARC_HEIGHT, 0, 180)
+                c.arc(x1, y_base, x2, y_base + TIE_ARC_HEIGHT, 0, 180)
             else:
                 # 跨行半连：行尾画半弧（从180°到270°）
                 right_edge = PAGE_WIDTH - RIGHT_MARGIN
                 yb1 = y1 + TIE_ARC_BASE
                 c.arc(
-                    x1 - 6, yb1,
+                    x1 - FONT_SIZE_NOTE/3, yb1,
                     right_edge, yb1 + TIE_ARC_HEIGHT,
                     90, 90
                 )
@@ -243,8 +243,8 @@ def draw_sheet(notes, output_path):
                 left_edge = LEFT_MARGIN
                 yb2 = y2 + TIE_ARC_BASE
                 c.arc(
-                    left_edge - 6, yb2,
-                    x2 + 6, yb2 + TIE_ARC_HEIGHT,
+                    left_edge - FONT_SIZE_NOTE, yb2,
+                    x2 + FONT_SIZE_NOTE/3, yb2 + TIE_ARC_HEIGHT,
                     0, 90
                 )
 

@@ -33,7 +33,7 @@ DOT_OFFSET_Y_RATIO = 0.35   # 附点（节奏点）相对字体高度的垂直�
                
 
 TIE_ARC_HEIGHT = FONT_SIZE_NOTE        # 连音线弧形的垂直高度（越大越弯）
-TIE_ARC_BASE = FONT_SIZE_NOTE/3           # 连音线与音符中心点之间的起始高度偏移
+TIE_ARC_BASE = FONT_SIZE_NOTE*3/4           # 连音线与音符中心点之间的起始高度偏移
 
 BEAM_LINE_OFFSET = FONT_SIZE_NOTE/5      # 节拍连接横线（beam）距离音符中心的垂直偏移（负值表示下方）
 
@@ -46,7 +46,7 @@ LOW_DOT_Y_OFFSET_RATIO = 0.60    # 低音点垂直偏移比例（相对字号）
 
 META_Y = PAGE_HEIGHT - 70  # 元信息（调式、节拍、速度）显示位置 Y 坐标（接近页顶）
 
-BAR_WIDTH = 1
+BAR_WIDTH = 2
 
 # 增加节奏时值比例映射（相对单位）
 # duration 值含义：
