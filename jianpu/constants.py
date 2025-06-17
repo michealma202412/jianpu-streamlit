@@ -28,7 +28,7 @@ LYRIC_OFFSET_Y = -(FONT_SIZE_NOTE + FONT_SIZE_LYRIC)       # 歌词相对于音�
 
 DOT_RADIUS = 1.1
 DOT_OFFSET_X_RATIO = 0.5
-DOT_OFFSET_Y_RATIO = 0.35   # 附点（节奏点）相对字体高度的垂直偏移比例
+DOT_OFFSET_Y_RATIO = 0.30   # 附点（节奏点）相对字体高度的垂直偏移比例
                            # 实际偏移 = FONT_SIZE_NOTE * 该比例
                
 

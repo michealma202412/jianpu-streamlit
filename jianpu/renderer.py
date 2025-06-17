@@ -38,10 +38,20 @@ def draw_note(c, x, y, note):
 
     # 高低音点
     # 高低音点应在数字正上/正下方，可适当微调横向偏移为 -1 ~ +1 之间
+    has_one_dash = note.get("duration", 1) == 0.5
+    has_two_dash = note.get("duration", 1) == 0.25
+
     if octave == 1:
         c.circle(x, y + FONT_SIZE_NOTE * HIGH_DOT_Y_OFFSET_RATIO, DOT_RADIUS, fill=1)
     elif octave == -1:
-        c.circle(x, y - FONT_SIZE_NOTE * LOW_DOT_Y_OFFSET_RATIO, DOT_RADIUS, fill=1)
+        dot_y = y
+        if has_one_dash:
+            dot_y = y - FONT_SIZE_NOTE * LOW_DOT_Y_OFFSET_RATIO
+        elif has_two_dash:
+            dot_y = y - FONT_SIZE_NOTE * LOW_DOT_Y_OFFSET_RATIO * 1.5
+        else:
+            dot_y = y - FONT_SIZE_NOTE * LOW_DOT_Y_OFFSET_RATIO * 0.5
+        c.circle(x, dot_y, DOT_RADIUS, fill=1)
 
     # 附点
     if note.get("dot"):

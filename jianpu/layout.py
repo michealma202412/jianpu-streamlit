@@ -223,28 +223,38 @@ def draw_sheet(notes, output_path):
 
     # 2. 渲染每组 tie（同行画，跨行跳过）
     for group in tie_groups.values():
+        # 检查本组是否含有高音点（pitch ≥8）
+        has_high_dot = any(n.get("pitch", 0) >= 8 for x0, y0, n in group)
+        # 根据是否含高音点，动态调整弧线起始高度和高度
+        if has_high_dot:
+            arc_base   = TIE_ARC_BASE
+            arc_height = TIE_ARC_HEIGHT
+        else:
+            arc_base   = TIE_ARC_BASE   * 0.66
+            arc_height = TIE_ARC_HEIGHT * 0.80
+            
         for i in range(len(group) - 1):
             x1, y1, _ = group[i]
             x2, y2, _ = group[i + 1]
             # 同行完整连音
             if y1 == y2:
-                y_base = y1 + TIE_ARC_BASE
-                c.arc(x1, y_base, x2, y_base + TIE_ARC_HEIGHT, 0, 180)
+                y_base = y1 + arc_base
+                c.arc(x1, y_base, x2, y_base + arc_height, 0, 180)
             else:
                 # 跨行半连：行尾画半弧（从180°到270°）
                 right_edge = PAGE_WIDTH - RIGHT_MARGIN
-                yb1 = y1 + TIE_ARC_BASE
+                yb1 = y1 + arc_base
                 c.arc(
                     x1 - FONT_SIZE_NOTE/3, yb1,
-                    right_edge, yb1 + TIE_ARC_HEIGHT,
+                    right_edge, yb1 + arc_height,
                     90, 90
                 )
                 # 行首画半弧（从270°到360°）
                 left_edge = LEFT_MARGIN
-                yb2 = y2 + TIE_ARC_BASE
+                yb2 = y2 + arc_base
                 c.arc(
                     left_edge - FONT_SIZE_NOTE, yb2,
-                    x2 + FONT_SIZE_NOTE/3, yb2 + TIE_ARC_HEIGHT,
+                    x2 + FONT_SIZE_NOTE/3, yb2 + arc_height,
                     0, 90
                 )
 
