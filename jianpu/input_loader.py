@@ -68,6 +68,7 @@ def txt_to_json(txt: str):
                         and not tok.lower() in ORNAMENT_SYMBOLS.keys()]
         if lyric_tokens:
             raw = " ".join(lyric_tokens)
+            note["lyric"] = raw
             # 优先按 | 切分
             if "|" in raw:
                 note["lyric"] = [seg.strip() for seg in raw.split("|")]
