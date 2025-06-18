@@ -15,7 +15,8 @@ st.set_page_config(page_title="Jianpu Generator", layout="centered")
 # 放在页面开头靠前位置
 if "parsed_notes" not in st.session_state:
     st.session_state["parsed_notes"] = None
-
+if "exported_txt" not in st.session_state:
+    st.session_state["exported_txt"] = ""
 st.title("🎼 简谱可视化生成器（支持 JSON / TXT）")
 
 st.markdown("""
@@ -146,41 +147,74 @@ if st.button("➕ 添加音符行", key="add_row"):
         {"id":uuid.uuid4().hex, "note_str":"", "lyrics":[], "cells":[]}
     )
 
+txt_lines = []
 # 解析并生成 TXT
-if st.button("🔀 解析并下载 TXT", key="export_txt"):
-    txt_lines = []
-    # metadata
-    txt_lines.append(f'title {title or ""}')
-    txt_lines.append(f'key {key_sig}')
-    txt_lines.append(f'time {time_sig}')
-    t = str(tempo) if tempo else "-"
-    txt_lines.append(f'tempo {t}')
-    if composer:  txt_lines.append(f'composer {composer}')
-    if lyricist:  txt_lines.append(f'lyricist {lyricist}')
-    if translator:txt_lines.append(f'translator {translator}')
-    txt_lines.append("")  # 空行分隔
-
-    # 每个 token
+if st.button("🔀 解析网格内容", key="parse_grid"):
+    st.session_state.pop("parsed_notes", None)
+    st.session_state.pop("exported_txt", None)
+    all_tokens = []
+    # —— metadata ——  
+    if title:     all_tokens.append({"title": title})
+    all_tokens.append({"key":    key_sig})
+    all_tokens.append({"time":   time_sig})
+    all_tokens.append({"tempo":  tempo or 0})
+    if composer:  all_tokens.append({"composer":  composer})
+    if lyricist:  all_tokens.append({"lyricist": lyricist})
+    if translator:all_tokens.append({"translator":translator})
+    # —— token body ——  
     for row in st.session_state["seq_rows"]:
         for cell in st.session_state[f"cells_{row['id']}"]:
             if not cell["pitch"]:
                 continue
-            parts = [cell["pitch"], str(cell["duration"])]
-            # 多行歌词拼接
-            combo = "|".join(cell["lyrics"])
-            parts.append(combo)
-            if cell["dot"]: parts.append("dot")
-            if cell["tie"]: parts.append("tie")
-            txt_lines.append(" ".join(parts))
-        txt_lines.append("")  # 小节分隔
+            tok = {
+                "pitch":    int(cell["pitch"]),
+                "duration": cell["duration"],
+                # "lyric":    "|".join(cell["lyrics"])
+            }
+            # 多行歌词
+            if len(cell["lyrics"]) > 1:
+                tok["lyrics"] = cell["lyrics"]
+            else:
+                tok["lyric"]  = cell["lyrics"][0]
 
-    contents = "\n".join(txt_lines)
-    st.download_button(
-        "📥 下载 TXT",
-        data=contents,
-        file_name="jianpu_input.txt",
-        mime="text/plain"
-    )
+            if cell["dot"]: tok["dot"] = True
+            if cell["tie"]: tok["tie"] = True
+            all_tokens.append(tok)
+        all_tokens.append({"bar": True})
+
+    # 存入 session，供后续下载 TXT / 生成 PDF 使用
+    st.session_state["parsed_notes"] = all_tokens
+
+
+    # metadata
+    if title:     txt_lines.append(f'title {title}')
+    txt_lines.append(f'key {key_sig}')
+    txt_lines.append(f'time {time_sig}')
+    txt_lines.append(f'tempo {tempo or "-"}')
+    if composer:  txt_lines.append(f'composer {composer}')
+    if lyricist:  txt_lines.append(f'lyricist {lyricist}')
+    if translator:txt_lines.append(f'translator {translator}')
+    txt_lines.append("")  # 分隔
+
+    for tok in st.session_state["parsed_notes"]:
+        if tok.get("bar"):
+            txt_lines.append("")     # 小节分隔空行
+        elif "pitch" in tok:
+            parts = [
+                str(tok["pitch"]),
+                str(tok["duration"]),
+                tok.get("lyric", "")
+            ]
+            if tok.get("dot"):
+                parts.append("dot")
+            if tok.get("tie"):
+                parts.append("tie")
+            txt_lines.append(" ".join(parts))
+        else:
+            # 跳过 title/key/time 等元数据
+            continue
+    st.session_state["exported_txt"] = "\n".join(txt_lines)
+    st.success("✅ 解析完成！现在可以下载 TXT 或生成 PDF。")
 
 #  --- 方式二：粘贴或使用「方式一」生成的 TXT 格式 ---
 st.markdown("📥 或直接粘贴简谱文本（两行格式：pitch + lyric）：")
@@ -202,8 +236,10 @@ repeat end
 """
 
 # 优先使用方式一生成的 TXT
-
-txt_input = st.text_area("🎹 简谱 TXT 格式", height=120, value=txt_example,key="txt_input_area")
+if txt_lines:
+    txt_input = txt_lines
+else:
+    txt_input = st.text_area("🎹 简谱 TXT 格式", height=120, value=txt_example,key="txt_input_area")
 
 if txt_input and st.button("🔍 解析简谱 TXT", key="btn_parse_txt"):
     try:
@@ -236,20 +272,39 @@ if input_json:
         st.error(f"❌ JSON 解析失败: {e}")
 
 # --- 文件名与生成 ---
-parsed_notes = st.session_state.get("parsed_notes")
-if parsed_notes :
+parsed_notes = st.session_state.get("parsed_notes", [])
+exported_txt  = st.session_state.get("exported_txt", "")
+
+if parsed_notes:
+    # 只有 parse_grid 按过后，exported_txt 才非空
+    if exported_txt:
+        st.download_button(
+            "📥 下载生成的 TXT 输入文件",
+            data=exported_txt,
+            file_name="jianpu_input.txt",
+            mime="text/plain",
+            key="download_txt"
+        )
+
+    # PDF 文件名输入
     filename = st.text_input("💾 输出 PDF 文件名：", value="jianpu_output.pdf")
     filename = re.sub(r'[^\w\-_.]', '_', filename)
     if not filename.endswith(".pdf"):
         filename += ".pdf"
+
     if st.button("🎶 生成简谱 PDF", key="btn_gen_pdf"):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
             draw_sheet(parsed_notes, tmpfile.name)
             st.success("✅ 简谱 PDF 生成成功！")
             with open(tmpfile.name, "rb") as f:
                 pdf_bytes = f.read()
-                st.download_button("📥 下载 PDF 文件", data=pdf_bytes, file_name=filename)
-                atexit.register(lambda: os.remove(tmpfile.name))
+                st.download_button(
+                    "📥 下载 PDF 文件",
+                    data=pdf_bytes,
+                    file_name=filename,
+                    key="download_pdf"
+                )
+            atexit.register(lambda: os.remove(tmpfile.name))
 # --- 示例 JSON 展示 ---
 if st.checkbox("📄 查看完整示例 JSON 格式（涵盖所有功能）"):
     example = [
