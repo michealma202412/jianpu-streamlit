@@ -1,5 +1,5 @@
 # jianpu/constants.py
-TITLE = "\u300a\u7f8e\u597d\u7684\u65f6\u523b\u300b\u7b80\u8c03\u6392\u7248\u793a\u4f8b"
+TITLE = "未输入歌曲名"
 FONT_NOTE = "Helvetica-Bold"
 FONT_LYRIC = "Chinese"
 FONT_PATH = "方正粗黑宋简体.ttf"

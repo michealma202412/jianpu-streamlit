@@ -3,17 +3,17 @@ from jianpu.constants import *
 import shlex
 
 def txt_to_json(txt: str):
-    """
-    支持两类行：
-      1) 元信息行：<key> <value>，如
-         key G
-         time 4/4
-         tempo 80
-         title "美好的时刻"
-      2) 音符行：<pitch> <duration> <lyric...> [dot] [tie] [rest] [其他meta...]
-         例：5 1 附点 dot
-             6 0.5 连 tie
-    """
+    # """
+    # 支持两类行：
+    #   1) 元信息行：<key> <value>，如
+    #      key G
+    #      time 4/4
+    #      tempo 80
+    #      title "美好的时刻"
+    #   2) 音符行：<pitch> <duration> <lyric...> [dot] [tie] [rest] [其他meta...]
+    #      例：5 1 附点 dot
+    #          6 0.5 连 tie
+    # """
     lines = [line.strip() for line in txt.strip().splitlines() if line.strip()]
     result = []
     beat_counter = 0.0  # 拍子累加器，用于自动加 bar
