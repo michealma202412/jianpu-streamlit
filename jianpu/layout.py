@@ -39,7 +39,7 @@ def get_min_token_width(token):
     if dur in (2, 3, 4):
         dash_cnt = int(dur) - 1
         dw = dash_width()  # 单个 '-' 宽度
-        gap = 2
+        gap = FONT_SIZE_NOTE/3
         base += dash_cnt * (dw + gap)
 
     return base
@@ -178,8 +178,7 @@ def draw_sheet(notes, output_path):
                 prev_extra = extra_unit * gap_weights[idx-1] if idx > 0 else 0
                 # 2) 动态偏移：上一元素 min_w 的 40%（如果有上一元素），否则默认半个 NOTE_STEP
                 if idx > 0:
-                    _, prev_w = line[idx-1]
-                    shift = prev_w * 0.4
+                    shift = NOTE_STEP/3
                 else:
                     shift = NOTE_STEP * 0.5
                 
