@@ -26,14 +26,15 @@ def get_min_token_width(token):
         if isinstance(lyrics, (list, tuple)):
             widths = [stringWidth(str(line), FONT_LYRIC, FONT_SIZE_LYRIC) for line in lyrics]
             max_text_w = max(widths)
-            pad = FONT_SIZE_LYRIC * (1 + len(lyrics) * 0.2)
+            pad = FONT_SIZE_LYRIC * (len(lyrics) * 0.10)
         else:
             lines = str(lyrics).split("\n")
             widths = [stringWidth(line, FONT_LYRIC, FONT_SIZE_LYRIC) for line in lines]
             max_text_w = max(widths)
-            pad = FONT_SIZE_LYRIC * (1 + len(lines) * 0.2)
+            pad = FONT_SIZE_LYRIC * (len(lines) * 0.10)
         base = max(base, max_text_w + pad)
-
+    else:
+        base = max(base, NOTE_STEP * 1.5)
     # dash
     if dur in (2, 3, 4):
         dash_cnt = int(dur) - 1
