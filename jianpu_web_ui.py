@@ -37,10 +37,10 @@ lyricist -
 translator -
 composer -
 repeat start
--3 1  低
-1 1  中
-9 1  高
-5 1  附点, dot 
+-3 1  低|低
+1 1  中|中
+9 1  高|高
+5 1  附点,|附点, dot 
 6 0.5  连 tie
 6 0.5  音
 0 1, rest   休
