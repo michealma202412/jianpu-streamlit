@@ -262,39 +262,77 @@ def draw_sheet(notes, output_path):
     line_len = NOTE_STEP / 2
     dash_y = lambda y0: y0 - BEAM_LINE_OFFSET
 
-    # 1) 收集每行所有“可 beam”音符：有效时值 < 1
-    rows = defaultdict(list)
-    for idx, (x0, y0, n0) in enumerate(note_positions):
-        dur0 = n0.get("duration", 1)
-        eff = dur0 * (1.5 if n0.get("dot") else 1.0) -(1 if dur0 == 1 else 0)   # dot 算成 ×1.5
-        if eff < 1.0:
-            rows[y0].append((idx, x0, eff))
-
-    # 2) 对每行，按 idx 排序，再分段：只要连续且累加 eff≤1 就画同一根 dash
-    for y0, items in rows.items():
-        items.sort(key=lambda t: t[0])
-        group = []
-        total = 0.0
-        for idx, x0, eff in items:
-            if group and idx == group[-1][0] + 1 and total + eff <= 1.0:
-                group.append((idx, x0, eff))
-                total += eff
-            else:
-                # 画上一段
-                if len(group) >= 2:
-                    xs = [p for _, p, _ in group]
+    def _draw_dash_for_group(group, y0):
+        """
+        group: list of tuples (idx, x0, eff, drop)
+        只对同组里连续的 drop=False 段落画 dash
+        """
+        sub = []
+        prev_idx = None
+        for idx, x0, eff, drop in group:
+            if drop:
+                # 碰到 drop，就先 flush 一次 sub
+                if len(sub) >= 2:
+                    xs = [p for _, p in sub]
                     start = xs[0] + line_len/2
                     end   = xs[-1] - line_len/2
                     if end > start:
                         c.line(start, dash_y(y0), end, dash_y(y0))
-                # 重置新段
-                group = [(idx, x0, eff)]
-                total = eff
-        # 收尾
-        if len(group) >= 2:
-            xs = [p for _, p, _ in group]
+                sub = []
+                prev_idx = None
+            else:
+                # 非 drop，检查是否和上一个连续
+                if prev_idx is None or idx == prev_idx + 1:
+                    sub.append((idx, x0))
+                else:
+                    # 中断，flush 上一段
+                    if len(sub) >= 2:
+                        xs = [p for _, p in sub]
+                        start = xs[0] + line_len/2
+                        end   = xs[-1] - line_len/2
+                        if end > start:
+                            c.line(start, dash_y(y0), end, dash_y(y0))
+                    sub = [(idx, x0)]
+                prev_idx = idx
+
+        # 最后一段 flush
+        if len(sub) >= 2:
+            xs = [p for _, p in sub]
             start = xs[0] + line_len/2
             end   = xs[-1] - line_len/2
             if end > start:
                 c.line(start, dash_y(y0), end, dash_y(y0))
+
+    # 1) 收集每行所有“可 beam”音符：有效时值 < 1
+    rows = defaultdict(list)
+    for idx, (x0, y0, n0) in enumerate(note_positions):
+        dur0 = n0.get("duration", 1)
+        is_dot = n0.get("dot", False)
+        eff = dur0 * (1.5 if n0.get("dot") else 1.0)   # dot 算成 ×1.5
+        drop = False
+        if dur0 == 1 and is_dot:
+            eff -= 1.0
+            drop = True
+        if is_dot or eff < 1.0:
+            rows[y0].append((idx, x0, eff, drop))
+
+    # 2) 分行分段：连续 idx 且 累加 eff<=1 同一组
+    for y0, items in rows.items():
+        items.sort(key=lambda t: t[0])
+        group = []
+        total = 0.0
+        for idx, x0, eff, drop in items:
+            if group and idx == group[-1][0] + 1 and total + eff <= 1.0:
+                group.append((idx, x0, eff, drop))
+                total += eff
+            else:
+                # flush 整个 group
+                if len(group) >= 2:
+                    _draw_dash_for_group(group, y0)
+                # 重置
+                group = [(idx, x0, eff, drop)]
+                total = eff
+        # 收尾
+        if len(group) >= 2:
+            _draw_dash_for_group(group, y0)
     c.save()

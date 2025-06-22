@@ -31,7 +31,7 @@ st.markdown("📥 直接粘贴简谱文本（格式：pitch duration lyric dot t
 
 txt_example = """title 名称
 key "G"
-time "4/4"
+time "3/4"
 tempo 80
 lyricist -
 translator -
@@ -40,12 +40,13 @@ repeat start
 -3 1  低|低
 1 1  中|中
 9 1  高|高
-5 1  附点,|附点, dot 
+5 1  附点|附点 dot 
+5 1  附点|附点 dot 
 6 0.5  连 tie
 6 0.5  音
-0 1, rest   休
-5 1  大
-6 1  声
+0 1  休
+5 0.5  大
+6 0.5  声
 repeat end
 """
 
