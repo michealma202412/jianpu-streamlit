@@ -258,38 +258,41 @@ def draw_sheet(notes, output_path):
                     0, 90
                 )
 
-    # —— 连续 dash 连接 ——  
+    # ——— 连续 dash 连接（按累积时值≤1分组） ———
     line_len = NOTE_STEP / 2
-    # dash 纵坐标：和 draw_note 里保持一致
     dash_y = lambda y0: y0 - BEAM_LINE_OFFSET
-    c.setLineWidth(1)
-    # 先按行收集带 index 的短音符
+
+    # 1) 收集每行所有“可 beam”音符：有效时值 < 1
     rows = defaultdict(list)
     for idx, (x0, y0, n0) in enumerate(note_positions):
-        if n0.get("duration", 1) <= 0.5:
-            rows[y0].append((idx, x0))
+        dur0 = n0.get("duration", 1)
+        eff = dur0 * (1.5 if n0.get("dot") else 1.0) -(1 if dur0 == 1 else 0)   # dot 算成 ×1.5
+        if eff < 1.0:
+            rows[y0].append((idx, x0, eff))
 
-    # 对每行，按原始 idx 排序，扫描相邻段落
+    # 2) 对每行，按 idx 排序，再分段：只要连续且累加 eff≤1 就画同一根 dash
     for y0, items in rows.items():
         items.sort(key=lambda t: t[0])
-        group = [items[0]]
-        for cur in items[1:]:
-            prev = group[-1]
-            # 如果在原始列表中 idx 连号，就归为一组
-            if cur[0] == prev[0] + 1:
-                group.append(cur)
+        group = []
+        total = 0.0
+        for idx, x0, eff in items:
+            if group and idx == group[-1][0] + 1 and total + eff <= 1.0:
+                group.append((idx, x0, eff))
+                total += eff
             else:
-                # 不连续了，先把上一组画出来
+                # 画上一段
                 if len(group) >= 2:
-                    xs = [p for _, p in group]
+                    xs = [p for _, p, _ in group]
                     start = xs[0] + line_len/2
                     end   = xs[-1] - line_len/2
                     if end > start:
                         c.line(start, dash_y(y0), end, dash_y(y0))
-                group = [cur]
-        # 别忘了把最后一组也画了
+                # 重置新段
+                group = [(idx, x0, eff)]
+                total = eff
+        # 收尾
         if len(group) >= 2:
-            xs = [p for _, p in group]
+            xs = [p for _, p, _ in group]
             start = xs[0] + line_len/2
             end   = xs[-1] - line_len/2
             if end > start:
